@@ -1,0 +1,81 @@
+-Expressões regulares para localizar e/ou substituir textos no codigo COBOL e outras linguagens(Notepad++, IBM Rdz, Eclipse, Visual Studio)
+Obs: No Notepad++ em alguns casos, verificar se o checkbox ". considerar quebra" está habilitado ou não.
+
+* procedures
+	
+	^.{6}[^*]\s*(\d{4,}-[\w-]+\s*SECTION\.).*?$
+
+
+* procedures e indicador de fim-procedure
+	
+	^.{6}[^*]\s*((?:\d{4,}-)\w[\w.-]+?\s*(?:SECTION\.|EXIT\.)).*?$
+
+
+* sessoes de codigo
+
+	^.{6}[^*]\s*((?:\d{4,}-)?[\w-]+[\w ]*?\s(?:DIVISION\.|SECTION\.|CONTROL\.)).*?$
+
+
+* tudo
+
+	^.{6}[^*]\s*((?:\d{4,}-)?[\w-]+[\w ]*?\s(DIVISION\.|SECTION\.|CONTROL\.)|\d{4,}-[\w.-]+?\s*(SECTION\.|EXIT\.|PRINCIPAL\.)).*?$
+
+
+* selecionar campos de movimentação para a variavel FRWKGHEA-IDEN-PARAGRAFO
+
+	^.{6}[^*]\s*MOVE\s*'?([\w-]+)'?\s*TO FRWKGHEA-IDEN-PARAGRAFO.*?$
+
+
+* Selecionar procedure completa
+
+	^.{6}[^*]\s*((\d{4,})-[\w-]+)\s*?SECTION\..+?\2-99-FIM\.\s*?EXIT\.
+
+
+* selecionar procedures que contenham a variavel/referência x dentro dela 
+
+	^.{6}[^*]\s*((\d{4,})-[\w-]+)\s*?SECTION\..+?NOMEVARIAVEL.+?\2-99-FIM\.\s*?EXIT\.
+
+
+* modificar variaveis/tabelas não comentadas e informar dono da alteração
+
+	Localizar :	^.{6}([^*].+?)NOMETABELAOUVARIAVEL(.*?)$ 
+	Substituir: 	4SYSJO$1NOVATABELAOUNOVAVARIAVEL$2
+
+
+* Remover acentuação por caractere, independente do tipo
+	
+	Localizar :	[[==%==]]                    onde "%"  representa o caractere base "A", "E", "C", etc.
+	Substituir:	%
+
+	// Exemplo: Remover todas as letras acentuadas do caractere "A": "ÀÁÃÂÄàáâãä"
+
+
+		Antes:  "CASARÃO À VISTA DO CÃO DA ÂNGELA STRUdhÄLZ"
+
+
+		Localizar :	[[==A==]]                    
+		Substituir:	A
+
+
+		Depois: "CASARAO A VISTA DO CAO DA ANGELA STRUDHALZ"
+
+	//fim exemplo
+
+
+* regex data (sem teste ano bissexto)
+	^(((31|[12][0-9]|[0]?[1-9])/(1[02]|[0]?[13578]))|((30|[12][0-9]|[0]?[1-9])/(1[0-2]|[0]?[^02]))|(([21][0-9]|[0]?[1-9])/([0]?[2])))$
+
+
+* Remover comentario e linhas em branco da ultima linha
+
+	Localizar :	\r\n//\*\s*\Z
+	Substituir:	\0 (ou nada)
+
+* Encontrar Linhas vazias
+	
+	^$
+
+* Excluir comentarios após o codigo cobol ou jcl do caractere 73 em diante ao substituir pelo grupo $1
+	
+	Localizar : 	^(.{72}).*$
+	Substituir:	$1
